@@ -23,7 +23,6 @@ public class ClienteRepositoryTest {
 
     AutoCloseable openMocks;
 
-
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);

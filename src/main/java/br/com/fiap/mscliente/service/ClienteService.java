@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 import br.com.fiap.mscliente.model.CepResponse;
 import br.com.fiap.mscliente.model.Cliente;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,15 @@ import br.com.fiap.mscliente.repository.ClienteRepository;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
     private ClienteRepository repository;
+
+    public ClienteService(ClienteRepository repository) {
+        this.repository = repository;
+    }
+
     public List<Cliente> buscarTodos() {
         return repository.findAll();
     }
@@ -117,7 +122,7 @@ public class ClienteService {
         }
     }
 
-    public void excluir(Integer id) {
+    public boolean excluir(Integer id) {
         Cliente existente = repository.findById(id).orElse(null);
 
         if (existente != null) {
@@ -125,5 +130,6 @@ public class ClienteService {
         } else {
             throw new NoSuchElementException("Cliente não encontrado");
         }
+        return true;
     }
 }
