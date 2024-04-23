@@ -1,14 +1,18 @@
 package br.com.fiap.mscliente.repository;
 
 import br.com.fiap.mscliente.model.Cliente;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -49,30 +53,59 @@ public class ClienteRepositoryTest {
         assertThat(clienteArmazenado)
                 .extracting(Cliente::getId)
                 .isEqualTo(cliente.getId());
-//        assertThat(avaliacaoArmazenada)
-//                .extracting(Avaliacao::getCliente)
-//                .isEqualTo(avaliacao.getCliente());
-
     }
 
-    @Test
-    void AlterarCliente(){
-        fail("teste não implementado");
-    }
 
     @Test
     void DeletarCliente(){
-        fail("teste não implementado");
+
+        // Arrange
+        Integer id = new Random().nextInt();
+        doNothing().when(clienteRepository).deleteById(id);
+        // Act
+        clienteRepository.deleteById(id);
+        // Assert
+        verify(clienteRepository, times(1)).deleteById(id);
     }
 
     @Test
     void ListarCliente(){
-        fail("teste não implementado");
+
+        // Arrange
+        Cliente cliente1 = gerarCliente();
+        Cliente cliente2 = gerarCliente();
+        List<Cliente> clienteList = Arrays.asList(cliente1, cliente2);
+
+        when(clienteRepository.findAll()).thenReturn(clienteList);
+
+        // Act
+        List<Cliente> resultado = clienteRepository.findAll();
+
+        // Assert
+        verify(clienteRepository, times(1)).findAll();
+        Assertions.assertThat(resultado)
+                .hasSize(2)
+                .containsExactlyInAnyOrder(cliente1, cliente2);
     }
 
     @Test
     void ListarUmCliente(){
-        fail("teste não implementado");
+        // Arrange
+        Cliente cliente = gerarCliente();
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+
+        // Act
+        Cliente clienteArmazenado = clienteRepository.save(cliente);
+
+        // Assert
+        verify(clienteRepository, times(1)).save(cliente);
+        Assertions.assertThat(clienteArmazenado)
+                .isInstanceOf(Cliente.class)
+                .isNotNull()
+                .isEqualTo(cliente);
+        Assertions.assertThat(clienteArmazenado)
+                .extracting(Cliente::getId)
+                .isEqualTo(cliente.getId());
     }
 
     private Cliente gerarCliente() {
