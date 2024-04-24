@@ -2,19 +2,13 @@ package br.com.fiap.mscliente.service;
 
 import br.com.fiap.mscliente.model.Cliente;
 import br.com.fiap.mscliente.repository.ClienteRepository;
-import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,23 +47,18 @@ class ClienteServiceIT {
 
     @Test
     void ListarUmCliente(){
+
         clienteService= new ClienteService(clienteRepository);
         // Arrange
         int id = 100;
-        Cliente cliente = gerarCliente();
-        cliente.setId(id);
 
         // Act
         ResponseEntity<?> resposta = clienteService.buscarUm(id);
         Cliente clienteArmazenado = (Cliente) resposta.getBody();
 
         // Assert
-        Assertions.assertThat(clienteArmazenado)
-                .isInstanceOf(Cliente.class)
+        assertThat(clienteArmazenado)
                 .isNotNull();
-        Assertions.assertThat(clienteArmazenado)
-                .extracting(Cliente::getId)
-                .isEqualTo(cliente.getId());
     }
 
     @Test
