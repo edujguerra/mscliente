@@ -35,8 +35,7 @@ class ClienteServiceIT {
         Cliente cliente = ClienteHelper.gerarCliente();
 
         // Act
-        ResponseEntity<?> resposta = clienteService.salvar(cliente);
-        Cliente clienteArmazenado = (Cliente) resposta.getBody();
+        Cliente clienteArmazenado = clienteService.salvar(cliente);
 
         // Assert
         assertThat(clienteArmazenado)

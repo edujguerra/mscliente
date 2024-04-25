@@ -15,25 +15,25 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ClienteService {
 
-    private final ClienteRepository repository;
+    private final ClienteRepository clienteRepository;
 
     public ClienteService(ClienteRepository repository) {
-        this.repository = repository;
+        this.clienteRepository = repository;
     }
 
     public List<Cliente> buscarTodos() {
-        return repository.findAll();
+        return clienteRepository.findAll();
     }
 
-    public ResponseEntity<Object> salvar(Cliente cliente) {
+    public Cliente salvar(Cliente cliente) {
 
         ResponseEntity<Object> response = validaCampos(cliente);
         if (!response.getStatusCode().equals(HttpStatus.OK)  ){
-            return response;
+            throw new NoSuchElementException("Cliente com problemas..." + response);
         }
 
-        cliente = repository.save(cliente);
-        return ResponseEntity.ok(cliente);
+        cliente = clienteRepository.save(cliente);
+        return cliente;
     }
 
     private ResponseEntity<Object> validaCampos(Cliente cliente) {
@@ -88,7 +88,7 @@ public class ClienteService {
 
     public ResponseEntity<Object> buscarUm(Integer id ) {
 
-        Cliente cliente = repository.findById(id).orElse(null);
+        Cliente cliente = clienteRepository.findById(id).orElse(null);
 
         if (cliente != null) {
             return ResponseEntity.ok(cliente);
@@ -100,7 +100,7 @@ public class ClienteService {
     }
 
     public ResponseEntity<Object> atualizar(Integer id, Cliente novo) {
-        Cliente existente = repository.findById(id).orElse(null);
+        Cliente existente = clienteRepository.findById(id).orElse(null);
 
         if (existente != null) {
             ResponseEntity<Object> response = validaCampos(novo);
@@ -118,17 +118,17 @@ public class ClienteService {
             existente.setEmail(novo.getEmail());
             existente.setCpf(novo.getCpf());
 
-            return ResponseEntity.ok(repository.save(existente));
+            return ResponseEntity.ok(clienteRepository.save(existente));
         } else {
             throw new NoSuchElementException("Cliente não Encontrado.");
         }
     }
 
     public boolean excluir(Integer id) {
-        Cliente existente = repository.findById(id).orElse(null);
+        Cliente existente = clienteRepository.findById(id).orElse(null);
 
         if (existente != null) {
-            repository.delete(existente);
+            clienteRepository.delete(existente);
         } else {
             throw new NoSuchElementException("Cliente não encontrado");
         }

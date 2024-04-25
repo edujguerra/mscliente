@@ -27,8 +27,8 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody Cliente cliente){
 
-        var clienteRegistrado = service.salvar(cliente);
-        return new ResponseEntity<>(clienteRegistrado, HttpStatus.CREATED);
+        cliente = service.salvar(cliente);
+        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

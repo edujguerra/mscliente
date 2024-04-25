@@ -53,8 +53,7 @@ class ClienteServiceTest {
                 .thenAnswer(i -> i.getArgument(0));
 
         // Act
-        ResponseEntity<?> resposta = clienteService.salvar(cliente);
-        Cliente clienteArmazenado = (Cliente) resposta.getBody();
+        Cliente clienteArmazenado = clienteService.salvar(cliente);
 
         // Assert
         assertThat(clienteArmazenado)
