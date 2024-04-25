@@ -3,6 +3,7 @@ package br.com.fiap.mscliente.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.fiap.mscliente.model.Cliente;
+import br.com.fiap.mscliente.utils.ClienteHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -29,7 +30,7 @@ class ClienteRepositoryIT {
     void RegistrarCliente(){
 
         // Arrange
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
 
         //act
         Cliente clienteRecebido = clienteRepository.save(cliente);
@@ -80,20 +81,5 @@ class ClienteRepositoryIT {
 
         // Assert
         assertThat(resultado).hasSize(3);
-
-    }
-
-    private Cliente gerarCliente() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Eduardo");
-        cliente.setUf("RS");
-        cliente.setEndereco("rua");
-        cliente.setCidade("Caxias");
-        cliente.setBairro("bairro");
-        cliente.setCpf("10212");
-        cliente.setCep("95020-190");
-        cliente.setEmail("email");
-
-        return cliente;
     }
 }

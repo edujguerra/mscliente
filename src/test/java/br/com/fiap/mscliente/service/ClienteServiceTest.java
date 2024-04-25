@@ -2,6 +2,7 @@ package br.com.fiap.mscliente.service;
 
 import br.com.fiap.mscliente.model.Cliente;
 import br.com.fiap.mscliente.repository.ClienteRepository;
+import br.com.fiap.mscliente.utils.ClienteHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ClienteServiceTest {
+class ClienteServiceTest {
 
     private ClienteService clienteService;
 
@@ -46,7 +47,7 @@ public class ClienteServiceTest {
     void RegistrarCliente(){
 
         // Arrange
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(400);
         Mockito.when(clienteRepository.save(ArgumentMatchers.any(Cliente.class)))
                 .thenAnswer(i -> i.getArgument(0));
@@ -69,7 +70,7 @@ public class ClienteServiceTest {
 
         // Arrange
         int id = 100;
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(id);
         Mockito.when(clienteRepository.findById(ArgumentMatchers.any(Integer.class)))
                 .thenReturn(Optional.of(cliente));
@@ -91,7 +92,7 @@ public class ClienteServiceTest {
     @Test
     void DeletarCliente(){
         Integer id = 100;
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(id);
         when(clienteRepository.findById(id))
                 .thenReturn(Optional.of(cliente));
@@ -109,8 +110,8 @@ public class ClienteServiceTest {
     void ListarCliente(){
 
         // Arrange
-        Cliente cliente1 = gerarCliente();
-        Cliente cliente2 = gerarCliente();
+        Cliente cliente1 = ClienteHelper.gerarCliente();
+        Cliente cliente2 = ClienteHelper.gerarCliente();
         List<Cliente> clienteList = Arrays.asList(cliente1, cliente2);
 
         Mockito.when(clienteRepository.findAll()).thenReturn(clienteList);
@@ -123,19 +124,4 @@ public class ClienteServiceTest {
                 .hasSize(2)
                 .containsExactlyInAnyOrder(cliente1, cliente2);
     }
-    private Cliente gerarCliente() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Eduardo");
-        cliente.setUf("RS");
-        cliente.setEndereco("rua");
-        cliente.setCidade("Caxias");
-        cliente.setBairro("bairro");
-        cliente.setCpf("10212");
-        cliente.setCep("95020-190");
-        cliente.setEmail("email");
-        cliente.setComplemento("ap 2");
-
-        return cliente;
-    }
-
 }

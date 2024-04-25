@@ -2,7 +2,7 @@ package br.com.fiap.mscliente.controller;
 
 import br.com.fiap.mscliente.model.Cliente;
 import br.com.fiap.mscliente.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
-    @Autowired
-    private ClienteService service;
+    private final ClienteService service;
+
+    public ClienteController(ClienteService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public List<Cliente> buscarTodos() {
@@ -22,19 +25,20 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Cliente cliente){
+    public ResponseEntity<Object> salvar(@RequestBody Cliente cliente){
 
-        return service.salvar(cliente);
+        var clienteRegistrado = service.salvar(cliente);
+        return new ResponseEntity<>(clienteRegistrado, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarUm(@PathVariable Integer id) {
+    public ResponseEntity<Object> buscarUm(@PathVariable Integer id) {
 
         return service.buscarUm(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Integer id, @RequestBody Cliente novo) {
+    public ResponseEntity<Object> atualizar(@PathVariable Integer id, @RequestBody Cliente novo) {
 
         return service.atualizar(id,novo);
     }

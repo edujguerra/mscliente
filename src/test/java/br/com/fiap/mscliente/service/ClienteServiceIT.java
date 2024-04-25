@@ -2,6 +2,7 @@ package br.com.fiap.mscliente.service;
 
 import br.com.fiap.mscliente.model.Cliente;
 import br.com.fiap.mscliente.repository.ClienteRepository;
+import br.com.fiap.mscliente.utils.ClienteHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ class ClienteServiceIT {
 
     @Test
     void RegistrarCliente(){
+
         clienteService= new ClienteService(clienteRepository);
 
         // Arrange
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
 
         // Act
         ResponseEntity<?> resposta = clienteService.salvar(cliente);
@@ -50,10 +52,10 @@ class ClienteServiceIT {
 
         clienteService= new ClienteService(clienteRepository);
         // Arrange
-        int id = 100;
+        int id = 200;
 
         // Act
-        ResponseEntity<?> resposta = clienteService.buscarUm(id);
+        ResponseEntity<Object> resposta = clienteService.buscarUm(id);
         Cliente clienteArmazenado = (Cliente) resposta.getBody();
 
         // Assert
@@ -63,6 +65,7 @@ class ClienteServiceIT {
 
     @Test
     void ListarCliente(){
+
         clienteService= new ClienteService(clienteRepository);
         // Act
         List<Cliente> resultado = clienteService.buscarTodos();
@@ -77,27 +80,11 @@ class ClienteServiceIT {
 
         clienteService= new ClienteService(clienteRepository);
         Integer id = 100;
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(id);
 
         boolean resultado = clienteService.excluir(id);
 
         Assertions.assertThat(resultado).isTrue();
-    }
-
-
-    private Cliente gerarCliente() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Eduardo");
-        cliente.setUf("RS");
-        cliente.setEndereco("rua");
-        cliente.setCidade("Caxias");
-        cliente.setBairro("bairro");
-        cliente.setCpf("10212");
-        cliente.setCep("95020-190");
-        cliente.setEmail("email");
-        cliente.setComplemento("ap 2");
-
-        return cliente;
     }
 }

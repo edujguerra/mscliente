@@ -1,6 +1,7 @@
 package br.com.fiap.mscliente.repository;
 
 import br.com.fiap.mscliente.model.Cliente;
+import br.com.fiap.mscliente.utils.ClienteHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ClienteRepositoryTest {
+class ClienteRepositoryTest {
 
     @Mock
     private ClienteRepository clienteRepository;
@@ -37,7 +38,7 @@ public class ClienteRepositoryTest {
     void RegistrarCliente(){
 
         // Arrange
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
         // Act
@@ -71,8 +72,8 @@ public class ClienteRepositoryTest {
     void ListarCliente(){
 
         // Arrange
-        Cliente cliente1 = gerarCliente();
-        Cliente cliente2 = gerarCliente();
+        Cliente cliente1 = ClienteHelper.gerarCliente();
+        Cliente cliente2 = ClienteHelper.gerarCliente();
         List<Cliente> clienteList = Arrays.asList(cliente1, cliente2);
 
         when(clienteRepository.findAll()).thenReturn(clienteList);
@@ -90,7 +91,7 @@ public class ClienteRepositoryTest {
     @Test
     void ListarUmCliente(){
         // Arrange
-        Cliente cliente = gerarCliente();
+        Cliente cliente = ClienteHelper.gerarCliente();
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
         // Act
@@ -105,19 +106,5 @@ public class ClienteRepositoryTest {
         Assertions.assertThat(clienteArmazenado)
                 .extracting(Cliente::getId)
                 .isEqualTo(cliente.getId());
-    }
-
-    private Cliente gerarCliente() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Eduardo");
-        cliente.setUf("RS");
-        cliente.setEndereco("rua");
-        cliente.setCidade("Caxias");
-        cliente.setBairro("bairro");
-        cliente.setCpf("10212");
-        cliente.setCep("95020-190");
-        cliente.setEmail("email");
-
-        return cliente;
     }
 }

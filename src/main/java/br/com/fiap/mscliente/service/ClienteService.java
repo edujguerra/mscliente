@@ -5,8 +5,6 @@ import java.util.NoSuchElementException;
 
 import br.com.fiap.mscliente.model.CepResponse;
 import br.com.fiap.mscliente.model.Cliente;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,11 +13,9 @@ import br.com.fiap.mscliente.repository.ClienteRepository;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository repository;
+    private final ClienteRepository repository;
 
     public ClienteService(ClienteRepository repository) {
         this.repository = repository;
@@ -29,9 +25,9 @@ public class ClienteService {
         return repository.findAll();
     }
 
-    public ResponseEntity<?> salvar(Cliente cliente) {
+    public ResponseEntity<Object> salvar(Cliente cliente) {
 
-        ResponseEntity response = validaCampos(cliente);
+        ResponseEntity<Object> response = validaCampos(cliente);
         if (!response.getStatusCode().equals(HttpStatus.OK)  ){
             return response;
         }
@@ -40,10 +36,10 @@ public class ClienteService {
         return ResponseEntity.ok(cliente);
     }
 
-    private ResponseEntity validaCampos(Cliente cliente) {
+    private ResponseEntity<Object> validaCampos(Cliente cliente) {
 
         if (cliente.getNome() == null
-                || cliente.getNome().equals("")) {
+                || cliente.getNome().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nome não pode ser vazio.");
         }
         if (cliente.getEmail() == null ||
@@ -62,10 +58,12 @@ public class ClienteService {
                 cliente.getComplemento().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Complemento não pode ser vazio.");
         }
+
+
         try {
-            String URI = "https://viacep.com.br/ws/" + cliente.getCep() + "/json/";
+            String uriCep = "https://viacep.com.br/ws/" + cliente.getCep() + "/json/";
             RestTemplate restTemplate = new RestTemplate();
-            CepResponse cepResponse = restTemplate.getForEntity(URI, CepResponse.class).getBody();
+            CepResponse cepResponse = restTemplate.getForEntity(uriCep, CepResponse.class).getBody();
             if (cliente.getEndereco() == null ||
                     cliente.getEndereco().isEmpty()) {
                 cliente.setEndereco(cepResponse.getLogradouro());
@@ -88,22 +86,24 @@ public class ClienteService {
         return ResponseEntity.ok(cliente);
     }
 
-    public ResponseEntity<?> buscarUm(Integer id ) {
+    public ResponseEntity<Object> buscarUm(Integer id ) {
 
         Cliente cliente = repository.findById(id).orElse(null);
 
         if (cliente != null) {
             return ResponseEntity.ok(cliente);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Cliente não encontrado.");
         }
     }
 
-    public ResponseEntity<?> atualizar(Integer id, Cliente novo) {
+    public ResponseEntity<Object> atualizar(Integer id, Cliente novo) {
         Cliente existente = repository.findById(id).orElse(null);
 
         if (existente != null) {
-            ResponseEntity response = validaCampos(novo);
+            ResponseEntity<Object> response = validaCampos(novo);
             if (!response.getStatusCode().equals(HttpStatus.OK)  ){
                 return response;
             }
