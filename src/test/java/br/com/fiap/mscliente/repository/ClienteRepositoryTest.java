@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class ClienteRepositoryTest {
 
     @Mock
@@ -42,7 +45,7 @@ class ClienteRepositoryTest {
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
         // Act
-        var clienteArmazenado = clienteRepository.save(cliente);
+        Cliente clienteArmazenado = clienteRepository.save(cliente);
 
         // Assert
         verify(clienteRepository, times(1)).save(cliente);

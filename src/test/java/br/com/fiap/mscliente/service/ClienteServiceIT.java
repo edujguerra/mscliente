@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ClienteServiceIT {
 
@@ -50,6 +50,7 @@ class ClienteServiceIT {
     void ListarUmCliente(){
 
         clienteService= new ClienteService(clienteRepository);
+
         // Arrange
         int id = 200;
 
@@ -66,6 +67,9 @@ class ClienteServiceIT {
     void ListarCliente(){
 
         clienteService= new ClienteService(clienteRepository);
+        // Arrange
+        // **não precisa
+
         // Act
         List<Cliente> resultado = clienteService.buscarTodos();
 
@@ -78,12 +82,16 @@ class ClienteServiceIT {
     void DeletarCliente(){
 
         clienteService= new ClienteService(clienteRepository);
+
+        //arrange
         Integer id = 100;
         Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(id);
 
+        // Act
         boolean resultado = clienteService.excluir(id);
 
+        // Assert
         Assertions.assertThat(resultado).isTrue();
     }
 }

@@ -11,7 +11,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class ClienteServiceTest {
 
     private ClienteService clienteService;
@@ -90,6 +93,8 @@ class ClienteServiceTest {
 
     @Test
     void DeletarCliente(){
+
+        // Arrange
         Integer id = 100;
         Cliente cliente = ClienteHelper.gerarCliente();
         cliente.setId(id);
@@ -98,8 +103,10 @@ class ClienteServiceTest {
         doNothing()
                 .when(clienteRepository).deleteById(id);
 
+        // Act
         boolean resultado = clienteService.excluir(id);
 
+        // Assert
         Assertions.assertThat(resultado).isTrue();
         verify(clienteRepository, times(1)).findById(any(Integer.class));
         verify(clienteRepository, times(1)).delete(any(Cliente.class));
@@ -112,7 +119,6 @@ class ClienteServiceTest {
         Cliente cliente1 = ClienteHelper.gerarCliente();
         Cliente cliente2 = ClienteHelper.gerarCliente();
         List<Cliente> clienteList = Arrays.asList(cliente1, cliente2);
-
         Mockito.when(clienteRepository.findAll()).thenReturn(clienteList);
 
         // Act

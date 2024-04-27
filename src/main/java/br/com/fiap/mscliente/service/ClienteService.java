@@ -63,6 +63,7 @@ public class ClienteService {
         try {
             String uriCep = "https://viacep.com.br/ws/" + cliente.getCep() + "/json/";
             RestTemplate restTemplate = new RestTemplate();
+
             CepResponse cepResponse = restTemplate.getForEntity(uriCep, CepResponse.class).getBody();
             if (cliente.getEndereco() == null ||
                     cliente.getEndereco().isEmpty()) {

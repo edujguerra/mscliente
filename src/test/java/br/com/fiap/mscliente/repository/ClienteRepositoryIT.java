@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ClienteRepositoryIT {
     // o Teste de integração é verificado com o banco real, não mockado
@@ -43,7 +45,27 @@ class ClienteRepositoryIT {
     }
 
     @Test
+    void AlterarCliente(){
+
+        // Arrange
+        Cliente cliente = ClienteHelper.gerarCliente();
+        cliente.setId(200);
+        cliente.setNome("testes");
+
+        //act
+        Cliente clienteRecebido = clienteRepository.save(cliente);
+
+        //assert
+        assertThat(clienteRecebido)
+                .isInstanceOf(Cliente.class)
+                .isNotNull();
+        assertThat(clienteRecebido.getId()).isEqualTo(cliente.getId());
+        assertThat(clienteRecebido.getNome()).isEqualTo(cliente.getNome());
+    }
+
+    @Test
     void ListarUmCliente(){
+
         // Arrange
         int id = 200;
 
@@ -75,6 +97,9 @@ class ClienteRepositoryIT {
 
     @Test
     void ListarCliente(){
+
+        // Arrange
+        // ** não precisa
 
         // Act
         List<Cliente> resultado = clienteRepository.findAll();
