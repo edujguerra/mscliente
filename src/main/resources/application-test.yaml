@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:h2:mem:pedidos
+    url: jdbc:h2:mem:clientes
     username: root
     password: password
     driverClassName:
