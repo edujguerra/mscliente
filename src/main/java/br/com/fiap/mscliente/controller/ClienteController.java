@@ -2,9 +2,6 @@ package br.com.fiap.mscliente.controller;
 
 import br.com.fiap.mscliente.model.Cliente;
 import br.com.fiap.mscliente.service.ClienteService;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +12,8 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
+//    @Autowired
+//    RabbitTemplate rabbitTemplate;
     private final ClienteService service;
 
     public ClienteController(ClienteService service) {
@@ -25,10 +22,10 @@ public class ClienteController {
 
     @GetMapping
     public List<Cliente> buscarTodos() {
-        String msgKey = "clientes.v1.cliente-solicitado";
-        String message = "consultou cliente....";
+        //String msgKey = "clientes.v1.cliente-solicitado";
+        //String message = "consultou cliente....";
 
-        rabbitTemplate.convertAndSend(msgKey,message);
+        //rabbitTemplate.convertAndSend(msgKey,message);
 
         return service.buscarTodos();
     }
