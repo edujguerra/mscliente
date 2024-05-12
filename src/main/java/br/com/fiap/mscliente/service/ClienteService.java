@@ -59,7 +59,6 @@ public class ClienteService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Complemento não pode ser vazio.");
         }
 
-
         try {
             String uriCep = "https://viacep.com.br/ws/" + cliente.getCep() + "/json/";
             RestTemplate restTemplate = new RestTemplate();
