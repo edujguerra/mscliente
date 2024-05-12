@@ -11,15 +11,6 @@ localhost:8081/api/clientes/12
 2) valida cep 
 3) preenche campos cidade,uf, etc caso estejam em branco
 
-{
-"nome" : "eduardo",
-"email" : "email",
-"cep" : "95020",
-"cpf":"123",
-"complemento" : "ap 2"
-}
-
-
 ** com compila e já sobe o docker
 - docker-compose up --build
  
@@ -28,6 +19,3 @@ localhost:8081/api/clientes/12
 
 ** apenas compilar local
 - mvn package -DskipTests
-
-
-

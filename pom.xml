@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>br.com.fiap</groupId>
     <artifactId>mscliente</artifactId>
@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.3</junit.version>
+        <aspectj.version>1.9.19</aspectj.version>
     </properties>
     <dependencies>
         <dependency>
@@ -48,21 +49,36 @@
             <scope>test</scope>
         </dependency>
 
+
         <!--Testes        -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.21.0</version>
+            <version>3.24.2</version>
+        </dependency>
+        <!-- para testar controller de forma mais fluida -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-mock-mvc</artifactId>
+            <version>5.3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -105,14 +121,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!--Teste de comportamento BDD -->
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>7.17.0</version>
-            <scope>test</scope>
-        </dependency>
-
         <!--Rabbitmq -->
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
@@ -137,4 +145,60 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <configuration>
+                            <includes combine.self="override">
+                                <include>**/*IT.java</include>
+                            </includes>
+                            <excludes combine.self="override">
+                                <exclude>**/*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>system-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <configuration>
+                            <includes combine.self="override">
+                                <include>**/CucumberTest.java</include>
+                            </includes>
+                            <excludes combine.self="override">
+                            </excludes>
+                            <properties>
+                                <configurationParameters>
+                                    cucumber.junit-platform.naming-strategy=long
+                                </configurationParameters>
+                            </properties>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>performance-test</id>
+            <build>
+                <plugins>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
