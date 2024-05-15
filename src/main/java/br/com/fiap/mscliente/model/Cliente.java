@@ -8,6 +8,7 @@ import lombok.Data;
 @Entity
 @Table(name="tb_clientes")
 public class Cliente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente")
