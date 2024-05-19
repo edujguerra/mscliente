@@ -100,6 +100,7 @@ public class ClienteService {
     }
 
     public ResponseEntity<Object> atualizar(Integer id, Cliente novo) {
+
         Cliente existente = clienteRepository.findById(id).orElse(null);
 
         if (existente != null) {
@@ -125,6 +126,7 @@ public class ClienteService {
     }
 
     public boolean excluir(Integer id) {
+
         Cliente existente = clienteRepository.findById(id).orElse(null);
 
         if (existente != null) {

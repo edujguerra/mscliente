@@ -12,8 +12,6 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
-//    @Autowired
-//    RabbitTemplate rabbitTemplate;
     private final ClienteService service;
 
     public ClienteController(ClienteService service) {
@@ -22,10 +20,6 @@ public class ClienteController {
 
     @GetMapping
     public List<Cliente> buscarTodos() {
-        //String msgKey = "clientes.v1.cliente-solicitado";
-        //String message = "consultou cliente....";
-
-        //rabbitTemplate.convertAndSend(msgKey,message);
 
         return service.buscarTodos();
     }
